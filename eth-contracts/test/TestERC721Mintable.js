@@ -10,18 +10,19 @@ contract('TestERC721Mintable', accounts => {
             this.contract = await MonsterToken.new({from: account_one});
 
             // TODO: mint multiple tokens
-            await this.contract.mint(account_two, 1, { from: account_one });
+            await this.contract.mint(account_one, 1, { from: account_one });
             await this.contract.mint(account_two, 2, { from: account_one });
             await this.contract.mint(account_two, 3, { from: account_one });
         })
 
         it('should return total supply', async function () { 
             let totalSupply = await this.contract.totalSupply.call()
-            assert.equal(totalSupply.toNumber(), 3, 'Failed to get correct total supply');
+            assert.equal(totalSupply, 3n, 'Failed to get correct total supply');
         })
 
         it('should get token balance', async function () { 
-            
+            let balance = await this.contract.balanceOf.call(account_two, { from: account_two })
+            assert.equal(balance, 2n, "Incorrect balance of given account");
         })
 
         // token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
