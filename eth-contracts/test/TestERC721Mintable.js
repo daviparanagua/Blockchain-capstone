@@ -1,4 +1,4 @@
-var ERC721MintableComplete = artifacts.require('ERC721MintableComplete');
+var ERC721Mintable = artifacts.require('MonsterToken');
 
 contract('TestERC721Mintable', accounts => {
 
