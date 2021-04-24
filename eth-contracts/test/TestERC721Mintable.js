@@ -1,4 +1,4 @@
-var ERC721Mintable = artifacts.require('MonsterToken');
+var MonsterToken = artifacts.require('MonsterToken');
 
 contract('TestERC721Mintable', accounts => {
 
@@ -7,13 +7,17 @@ contract('TestERC721Mintable', accounts => {
 
     describe('match erc721 spec', function () {
         beforeEach(async function () { 
-            this.contract = await ERC721MintableComplete.new({from: account_one});
+            this.contract = await MonsterToken.new({from: account_one});
 
             // TODO: mint multiple tokens
+            await this.contract.mint(account_two, 1, { from: account_one });
+            await this.contract.mint(account_two, 2, { from: account_one });
+            await this.contract.mint(account_two, 3, { from: account_one });
         })
 
         it('should return total supply', async function () { 
-            
+            let totalSupply = await this.contract.totalSupply.call()
+            assert.equal(totalSupply.toNumber(), 3, 'Failed to get correct total supply');
         })
 
         it('should get token balance', async function () { 
@@ -32,7 +36,7 @@ contract('TestERC721Mintable', accounts => {
 
     describe('have ownership properties', function () {
         beforeEach(async function () { 
-            this.contract = await ERC721MintableComplete.new({from: account_one});
+            this.contract = await MonsterToken.new({from: account_one});
         })
 
         it('should fail when minting when address is not contract owner', async function () { 
