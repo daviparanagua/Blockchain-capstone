@@ -223,9 +223,10 @@ contract ERC721 is Pausable, ERC165 {
     // @dev Internal function to mint a new token
     function _mint(address to, uint256 tokenId) internal {
 
+        require(to != address(0), "Address must be valid");
         require(!_exists(tokenId), "Token already exists");
   
-        _mint(to, tokenId);
+        _tokenOwner[tokenId] = to;
         _ownedTokensCount[to].increment();
 
         emit Transfer(address(0), to, tokenId);
@@ -497,6 +498,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
 contract MonsterToken is ERC721Metadata("Monster Token", "MTK", "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {
+    
     function mint(address to, uint256 tokenId, string memory tokenURI) public onlyOwner returns(bool){
         super._mint(to, tokenId);
         super._setTokenURI(tokenId);
