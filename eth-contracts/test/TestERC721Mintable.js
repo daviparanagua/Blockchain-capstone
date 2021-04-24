@@ -4,6 +4,7 @@ contract('TestERC721Mintable', accounts => {
 
     const account_one = accounts[0];
     const account_two = accounts[1];
+    const account_three = accounts[2];
 
     describe('match erc721 spec', function () {
         beforeEach(async function () { 
@@ -26,12 +27,17 @@ contract('TestERC721Mintable', accounts => {
         })
 
         // token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
-        it('should return token uri', async function () { 
-            
+        it('should return token uri', async function () {
+            let tokenURI = await this.contract.tokenURI.call(1, { from: account_one });
+            assert.equal(tokenURI, 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1', "Failed to return original uri");
         })
 
         it('should transfer token from one owner to another', async function () { 
-            
+            let tokenId = 1;
+            await this.contract.transferFrom(account_one, account_three, tokenId, { from: account_one });
+
+            let newOwner = await this.contract.ownerOf.call(tokenId, {from: account_three});
+            assert.equal(newOwner, account_three, "Token was not transfered");
         })
     });
 
@@ -41,11 +47,18 @@ contract('TestERC721Mintable', accounts => {
         })
 
         it('should fail when minting when address is not contract owner', async function () { 
-            
+            let reverted = false;
+            try {
+                await this.contract.mint(account_three, 4, { from: account_two });
+            } catch (e) {
+                reverted = true;
+            }
+            assert.equal(reverted, true, "must not mint when not contract owner");
         })
 
         it('should return contract owner', async function () { 
-            
+            let owner = await this.contract._owner.call({ from: account_one });
+            assert.equal(owner, account_one, "must return correct owner");
         })
 
     });
