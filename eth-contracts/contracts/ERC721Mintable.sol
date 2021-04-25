@@ -10,6 +10,10 @@ contract Ownable {
 
     address private _owner;
 
+    function owner() public returns (address) {
+        return _owner;
+    }
+
     event OwnershipTransferred(address from, address to);
 
     constructor () internal{
