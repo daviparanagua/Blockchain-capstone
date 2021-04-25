@@ -46,7 +46,7 @@ event SolutionAdded(address addr, uint256 key);
     function mint(address to, uint256 _index) public returns(bool){
         require(uniqueSolutions[_index].addr == address(0), "Solution has already been used");
         addSolution(to, _index);
-        return super.mint(to, _index,  uint2str(_index));
+        return super.mint(to, _index);
     }
   
 }
