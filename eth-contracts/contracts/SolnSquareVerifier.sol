@@ -44,7 +44,7 @@ event SolutionAdded(address addr, uint256 key);
 //  - make sure the solution is unique (has not been used before)
 //  - make sure you handle metadata as well as tokenSuplly
     function mint(address to, uint256 _index) public returns(bool){
-        require(uniqueSolutions[_index].addr != address(0), "Solution has already been used");
+        require(uniqueSolutions[_index].addr == address(0), "Solution has already been used");
         addSolution(to, _index);
         return super.mint(to, _index,  uint2str(_index));
     }
