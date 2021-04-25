@@ -10,7 +10,7 @@ contract Ownable {
 
     address private _owner;
 
-    function owner() public returns (address) {
+    function owner() public view returns (address) {
         return _owner;
     }
 

@@ -17,17 +17,20 @@ contract('TestSolnSquareVerifier', accounts => {
     })
 
     it('Token can me minted with new solution', async function () {
-        let result = await this.contract.mint(account_two, 1, { from: account_one });
-        assert.equal(result.logs[0].event, 'SolutionAdded', 'Failed to add a solution')
+        let proof = zkProof.proof;
+        let result = await this.contract.mintWithProof(account_two, 1, proof.a, proof.b, proof.c, zkProof.inputs, { from: account_one });
+        let owner = await (this.contract.ownerOf(1,  { from: account_one }));
+
+        assert.equal(owner, account_two, 'Failed to add a solution and mint token')
     })
     // Test if an ERC721 token can be minted for contract - SolnSquareVerifier
 
     it('Token cant be minted with repeated solution', async function () {
-        let reversed = true
+        let reversed = false
         try {
-            await this.contract.mint(account_two, 1, { from: account_one })
+            let result = await this.contract.mintWithProof(account_two, 1, proof.a, proof.b, proof.c, zkProof.inputs, { from: account_one });
         } catch (e) {
-            reversed = false
+            reversed = true
         }
 
         assert.equal(reversed, true, "should not be able to mint");
