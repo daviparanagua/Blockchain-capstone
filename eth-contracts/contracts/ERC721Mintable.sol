@@ -499,7 +499,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
 contract MonsterToken is ERC721Metadata("Monster Token", "MTK", "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {
     
-    function mint(address to, uint256 tokenId, string memory tokenURI) public onlyOwner returns(bool){
+    function mint(address to, uint256 tokenId) public onlyOwner returns(bool){
         super._mint(to, tokenId);
         super._setTokenURI(tokenId);
         return true;
